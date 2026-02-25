@@ -1,0 +1,209 @@
+{
+  "facilities": [
+    {
+      "name": "SLAC",
+      "storage_systems": [
+        {
+          "name": "ffb",
+          "server_speed": "1Gf",
+          "type": "JBOD",
+          "disk_count": 1,
+          "read_bandwidth": "180MBps",
+          "write_bandwidth": "160MBps"
+        }
+      ],
+      "clusters": [
+        {
+          "name": "instrument",
+          "prefix": "node-",
+          "suffix": ".inst",
+          "count": 120,
+          "node": {
+            "speed": "11Gf",
+            "cores": 1,
+            "storage": {
+              "name": "local_nvme",
+              "read_bandwidth": "560MBps",
+              "write_bandwidth": "510MBps"
+            }
+          },
+          "backbone": {
+            "bandwidth": "1Tbps",
+            "latency": "1ms"
+          }
+        },
+        {
+          "name": "reduction",
+          "prefix": "node-",
+          "suffix": ".reduce",
+          "count": 120,
+          "node": {
+            "speed": "6Gf",
+            "cores": 1
+          },
+          "backbone": {
+            "bandwidth": "100Gbps",
+            "latency": "1ms"
+          }
+        },
+        {
+          "name": "slac_dtn",
+          "prefix": "node-",
+          "suffix": ".slack-dtn",
+          "count": 10,
+          "node": {
+            "speed": "6Gf",
+            "cores": 1
+          },
+          "backbone": {
+            "bandwidth": "100Gbps",
+            "latency": "1us"
+          }
+        }
+      ],
+      "links": [
+        {
+          "name": "instrument-to-reduction",
+          "bandwidth": "1Tbps",
+          "latency": "1ms"
+        },
+        {
+          "name": "reduction-to-ffb",
+          "bandwidth": "20Gbps",
+          "latency": "1ms"
+        },
+        {
+          "name": "ffb-to-slac-dtn",
+          "bandwidth": "20Gbps",
+          "latency": "1us"
+        }
+      ],
+      "routes": [
+        {
+          "src": "instrument",
+          "dst": "reduction",
+          "links": ["instrument-to-reduction"]
+        },
+        {
+          "src": "reduction",
+          "dst": "ffb",
+          "links": ["reduction-to-ffb"]
+        },
+        {
+          "src": "ffb",
+          "dst": "slac_dtn",
+          "links": ["ffb-to-slac-dtn"]
+        }
+      ]
+    },
+    {
+      "name": "nersc",
+      "storage_systems": [
+        {
+          "name": "scratch",
+          "server_speed": "1Gf",
+          "type": "JBOD",
+          "disk_count": 10000,
+          "read_bandwidth": "3GBps",
+          "write_bandwidth": "3GBps"
+        }
+      ],
+      "clusters": [
+        {
+          "name": "cori",
+          "prefix": "node-",
+          "suffix": ".cori",
+          "count": 64,
+          "node": {
+            "speed": "1177Gf",
+            "cores": 32,
+            "topology": {
+              "type": "dragonfly",
+              "groups": [6, 2],
+              "chassis": [3, 1],
+              "routers": [4, 1],
+              "nodes": 2,
+              "bandwidth": "10Gbps",
+              "latency": "1ms",
+              "sharing_policy": "SPLITDUPLEX"
+            },
+            "loopback": {
+              "bandwidth": "136Gbps",
+              "latency": "100ns"
+            }
+          },
+          "backbone": {
+            "bandwidth": "10Gbps",
+            "latency": "1ms"
+          }
+        },
+        {
+          "name": "cori-dtn",
+          "prefix": "node-",
+          "suffix": ".cori-dtn",
+          "count": 8,
+          "node": {
+            "speed": "10Gf",
+            "cores": 1
+          },
+          "backbone": {
+            "bandwidth": "200Gbps",
+            "latency": "1us"
+          }
+        }
+      ],
+      "links": [
+        {
+          "name": "cori-to-scratch",
+          "bandwidth": "700Gbps",
+          "latency": "1ms"
+        },
+        {
+          "name": "scratch-to-cori-dtn",
+          "bandwidth": "20Gbps",
+          "latency": "1us"
+        }
+      ],
+      "routes": [
+        {
+          "src": "cori-dtn",
+          "dst": "scratch",
+          "links": ["scratch-to-cori-dtn"]
+        },
+        {
+          "src": "cori",
+          "dst": "scratch",
+          "links": ["cori-to-scratch"]
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "name": "slac-to-nersc",
+      "bandwidth": "1Gbps",
+      "latency": "10ms"
+    }
+  ],
+  "routes": [
+    {
+      "src": "SLAC",
+      "dst": "nersc",
+      "links": ["slac-to-nersc"]
+    }
+  ],
+  "filesystems": [
+    {
+      "name": "ffb_fs",
+      "storage_system": "ffb",
+      "mount_point": "/ffb/",
+      "size": "560TB"
+    },
+    {
+      "name": "scratch_fs",
+      "storage_system": "scratch",
+      "mount_point": "/scratch/",
+      "size": "30PB"
+    }
+  ]
+}

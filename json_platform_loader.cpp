@@ -48,36 +48,93 @@ std::map<std::string, std::shared_ptr<sgfs::Storage>> storage_map;
 std::map<std::string, sg4::NetZone*> zone_map;
 std::map<std::string, const sg4::Link*> link_map;
 
+
+/**
+ * Create a NetZone representing a storage system (e.g. a Lustre scratch filesystem).
+ *
+ * Single-server mode (default, "server_count" absent or 1):
+ *   One host is created and all disks are attached to it.
+ *   Suitable for small or abstract storage systems.
+ *
+ * Multi-server mode ("server_count" > 1):
+ *   One host per I/O server is created. Disks are distributed across servers
+ *   as evenly as possible (any remainder disks go to the last server).
+ *   All disks are collected into a single JBOD storage so that the filesystem
+ *   layer sees one striped pool — mirroring how Lustre OSTs work.
+ *   Only meaningful for JBOD; OneDisk always uses a single server.
+ *
+ * JSON fields
+ * ───────────
+ *   name             – unique name for the zone / storage / filesystem reference
+ *   type             – "JBOD" or "OneDisk"
+ *   server_speed      – host speed for I/O servers (e.g. "1Gf")
+ *   server_count     – (optional, default 1) number of I/O server hosts
+ *   disk_count       – total number of disks across all servers
+ *   read_bandwidth   – per-disk read bandwidth  (e.g. "70MBps")
+ *   write_bandwidth  – per-disk write bandwidth (e.g. "70MBps")
+ *
+ * Example — Cori SCRATCH (248 OSS nodes, 10 000 disks, 700 GB/s aggregate):
+ *   {
+ *     "name":            "cori_scratch",
+ *     "type":            "JBOD",
+ *     "server_speed":    "1Gf",
+ *     "server_count":    248,
+ *     "disk_count":      10000,
+ *     "read_bandwidth":  "70MBps",
+ *     "write_bandwidth": "70MBps"
+ *   }
+ */
 void create_storage_system_zone(sg4::NetZone* parent, const json& storage_config)
 {
   const std::string name = storage_config["name"];
-  auto* zone             = parent->add_netzone_empty(name);
+  auto* zone             = parent->add_netzone_full(name);
   zone_map[name]         = zone;
 
   // Infer names from the storage system name
-  const std::string server_name  = name + "_server";
+  // const std::string server_name  = name + "_server";
   const std::string storage_name = name + "_storage";
   const std::string disk_name_base = name + "_disk";
 
   // Create server host
   const std::string server_speed = storage_config["server_speed"];
-  auto* server = zone->add_host(server_name, server_speed);
+  // auto* server = zone->add_host(server_name, server_speed);
 
   // Create storage
   const std::string storage_type = storage_config["type"];
-  int disk_count                 = storage_config["disk_count"];
+  // int disk_count                 = storage_config["disk_count"];
   const std::string read_bw      = storage_config["read_bandwidth"];
   const std::string write_bw     = storage_config["write_bandwidth"];
+  const int disk_count           = storage_config["disk_count"];
+  const int server_count         = storage_config.value("server_count", 1);
 
   if (storage_type == "JBOD") {
-    std::vector<sg4::Disk*> disks;
-    for (int i = 0; i < disk_count; i++) {
-      std::string disk_name = (disk_count == 1) ? disk_name_base : disk_name_base + std::to_string(i);
-      disks.push_back(server->add_disk(disk_name, read_bw, write_bw));
+    const int base_disks_per_server = disk_count / server_count;
+    const int remainder             = disk_count % server_count;
+
+    std::vector<sg4::Disk*> all_disks;
+    all_disks.reserve(disk_count);
+
+    for (int s = 0; s < server_count; s++) {
+      const int n_disks     = base_disks_per_server + (s == server_count - 1 ? remainder : 0);
+      const std::string server_name = (server_count == 1)
+                                        ? name + "_server"
+                                        : name + "_server" + std::to_string(s);
+      auto* server = zone->add_host(server_name, server_speed);
+
+      for (int d = 0; d < n_disks; d++) {
+        // Disk naming: flat index for single-server, server_disk index for multi
+        const std::string disk_name = (server_count == 1)
+                                        ? name + "_disk" + (disk_count == 1 ? "" : std::to_string(d))
+                                        : name + "_disk_s" + std::to_string(s) + "_d" + std::to_string(d);
+        all_disks.push_back(server->add_disk(disk_name, read_bw, write_bw));
+      }
+      storage_map[storage_name] = sgfs::JBODStorage::create(storage_name, all_disks);
     }
-    storage_map[storage_name] = sgfs::JBODStorage::create(storage_name, disks);
   } else if (storage_type == "OneDisk") {
-    auto* disk                = server->add_disk(disk_name_base, read_bw, write_bw);
+    const std::string server_name = name + "_server";
+    const std::string disk_name   = name + "_disk";
+    auto* server                  = zone->add_host(server_name, "1f");
+    auto* disk                = server->add_disk(disk_name, read_bw, write_bw);
     storage_map[storage_name] = sgfs::OneDiskStorage::create(storage_name, disk);
   }
 
@@ -88,6 +145,51 @@ void create_storage_system_zone(sg4::NetZone* parent, const json& storage_config
   zone->seal();
 }
 
+
+/**
+ * Create a NetZone for a cluster using the topology specified in the JSON config.
+ *
+ * Supported topologies (set via cluster_config["topology"]["type"]):
+ *   "star"       – simple star topology (default, one backbone link shared by all nodes)
+ *   "fat_tree"   – fat-tree topology   (requires "levels", "down", "up", "link_count")
+ *   "dragonfly"  – dragonfly topology  (requires "groups", "chassis", "routers", "nodes")
+ *   "torus"      – torus topology      (requires "dimensions" flat array of per-axis sizes, e.g. [4,4,4])
+ *
+ * Example JSON snippets
+ * ─────────────────────
+ * Star (default – no topology key needed):
+ *   { "name": "cluster0", "prefix": "node-", "suffix": "", "count": 16,
+ *     "backbone": { "bandwidth": "10Gbps", "latency": "1us" },
+ *     "node": { "speed": "1Gf", "cores": 4,
+ *               "private_link": { "bandwidth": "1Gbps", "latency": "0s" } } }
+ *
+ * Fat-tree:
+ *   { ..., "topology": { "type": "fat_tree",
+ *                         "levels": 2,
+ *                         "down":  [4, 2],
+ *                         "up":    [1, 1],
+ *                         "link_count": [1, 1],
+ *                         "bandwidth": "10Gbps",
+ *                         "latency":   "1us",
+ *                         "sharing_policy": "SPLITDUPLEX" } }
+ *
+ * Dragonfly:
+ *   { ..., "topology": { "type": "dragonfly",
+ *                         "groups":   [6, 2],
+ *                         "chassis":  [3, 1],
+ *                         "routers":  [4, 1],
+ *                         "nodes":    2,
+ *                         "bandwidth": "10Gbps",
+ *                         "latency":   "1us",
+ *                         "sharing_policy": "SPLITDUPLEX" } }
+ *
+ * Torus:
+ *   { ..., "topology": { "type": "torus",
+ *                         "dimensions": [[4,1],[4,1],[4,1]],
+ *                         "bandwidth": "10Gbps",
+ *                         "latency":   "1us",
+ *                         "sharing_policy": "SPLITDUPLEX" } }
+ */ 
 void create_cluster_zone(sg4::NetZone* parent, const json& cluster_config)
 {
   const std::string name   = cluster_config["name"];
@@ -95,15 +197,92 @@ void create_cluster_zone(sg4::NetZone* parent, const json& cluster_config)
   const std::string suffix = cluster_config["suffix"];
   int count                = cluster_config["count"];
 
-  auto* cluster  = parent->add_netzone_star(name);
+    // ── Determine topology ────────────────────────────────────────────────────
+  std::string topo_type = "star";
+  if (cluster_config.contains("topology")) {
+    topo_type = cluster_config["topology"].value("type", "star");
+  }
+
+  sg4::NetZone* cluster = nullptr;
+
+  if (topo_type == "fat_tree") {
+    // ── Fat-tree ─────────────────────────────────────────────────────────
+    // API: add_netzone_fatTree(name, n_levels,
+    //          down_links, up_links, link_counts,   <- all unsigned int vectors
+    //          bandwidth, latency, SharingPolicy)
+    const auto& topo = cluster_config["topology"];
+    unsigned int levels                        = topo["levels"];
+    std::vector<unsigned int> down             = topo["down"].get<std::vector<unsigned int>>();
+    std::vector<unsigned int> up               = topo["up"].get<std::vector<unsigned int>>();
+    std::vector<unsigned int> lnk_count        = topo["link_count"].get<std::vector<unsigned int>>();
+    const std::string bw                       = topo["bandwidth"];
+    const std::string lat                      = topo.value("latency", "0s");
+    const std::string sharing_policy_str       = topo.value("sharing_policy", "SPLITDUPLEX");
+    sg4::Link::SharingPolicy sharing_policy    = (sharing_policy_str == "SHARED")
+                                                   ? sg4::Link::SharingPolicy::SHARED
+                                                   : sg4::Link::SharingPolicy::SPLITDUPLEX;
+
+    cluster = parent->add_netzone_fatTree(name, levels, down, up, lnk_count, bw, lat, sharing_policy);
+
+  } else if (topo_type == "dragonfly") {
+    // ── Dragonfly ────────────────────────────────────────────────────────
+    // API: add_netzone_dragonfly(name,
+    //          groups{n,links}, chassis{n,links}, routers{n,links},  <- pairs of unsigned int
+    //          nodes,                                                 <- unsigned int
+    //          bandwidth, latency, SharingPolicy)
+    const auto& topo = cluster_config["topology"];
+    std::vector<unsigned int> groups_v  = topo["groups"].get<std::vector<unsigned int>>();
+    std::vector<unsigned int> chassis_v = topo["chassis"].get<std::vector<unsigned int>>();
+    std::vector<unsigned int> routers_v = topo["routers"].get<std::vector<unsigned int>>();
+    unsigned int nodes_per_router       = topo.value("nodes", 2u);
+    const std::string bw                = topo["bandwidth"];
+    const std::string lat               = topo.value("latency", "0s");
+    const std::string sharing_policy_str     = topo.value("sharing_policy", "SPLITDUPLEX");
+    sg4::Link::SharingPolicy sharing_policy  = (sharing_policy_str == "SHARED")
+                                                 ? sg4::Link::SharingPolicy::SHARED
+                                                 : sg4::Link::SharingPolicy::SPLITDUPLEX;
+
+    cluster = parent->add_netzone_dragonfly(name,
+                                            {groups_v[0],  groups_v[1]},
+                                            {chassis_v[0], chassis_v[1]},
+                                            {routers_v[0], routers_v[1]},
+                                            nodes_per_router,
+                                            bw, lat, sharing_policy);
+
+  } else if (topo_type == "torus") {
+    // ── Torus ────────────────────────────────────────────────────────────
+    // API: add_netzone_torus(name,
+    //          dimensions,   <- flat vector<unsigned long> of per-axis sizes
+    //          bandwidth, latency, SharingPolicy)
+    // NOTE: dimensions is a flat list of sizes, e.g. [4, 4, 4] for a 4x4x4 torus.
+    //       There is NO per-axis link-count parameter in this API.
+    const auto& topo = cluster_config["topology"];
+    std::vector<unsigned long> dims            = topo["dimensions"].get<std::vector<unsigned long>>();
+    const std::string bw                       = topo["bandwidth"];
+    const std::string lat                      = topo.value("latency", "0s");
+    const std::string sharing_policy_str       = topo.value("sharing_policy", "SPLITDUPLEX");
+    sg4::Link::SharingPolicy sharing_policy    = (sharing_policy_str == "SHARED")
+                                                   ? sg4::Link::SharingPolicy::SHARED
+                                                   : sg4::Link::SharingPolicy::SPLITDUPLEX;
+
+    cluster = parent->add_netzone_torus(name, dims, bw, lat, sharing_policy);
+
+  } else {
+    // ── Star (default) ───────────────────────────────────────────────────
+    cluster = parent->add_netzone_star(name);
+  }
+
   zone_map[name] = cluster;
 
   // Create backbone
-  const auto& backbone_cfg       = cluster_config["backbone"];
-  const std::string backbone_bw  = backbone_cfg["bandwidth"];
-  const std::string backbone_lat = backbone_cfg.value("latency", "0s");
-  const std::string backbone_name = name + "_backbone";
-  const auto* backbone = cluster->add_link(backbone_name, backbone_bw)->set_latency(backbone_lat);
+  const sg4::Link* backbone = nullptr;
+  if (topo_type == "star") {
+    const auto& backbone_cfg        = cluster_config["backbone"];
+    const std::string backbone_bw   = backbone_cfg["bandwidth"];
+    const std::string backbone_lat  = backbone_cfg.value("latency", "0s");
+    const std::string backbone_name = name + "_backbone";
+    backbone = cluster->add_link(backbone_name, backbone_bw)->set_latency(backbone_lat);
+  }
 
   // Node configuration
   const auto& node_cfg = cluster_config["node"];
@@ -111,13 +290,29 @@ void create_cluster_zone(sg4::NetZone* parent, const json& cluster_config)
   const std::string host_speed = node_cfg["speed"];
   int host_cores               = node_cfg["cores"];
 
-  const auto& private_link_cfg   = node_cfg["private_link"];
-  const std::string link_bw      = private_link_cfg["bandwidth"];
-  const std::string link_lat     = private_link_cfg.value("latency", "0s");
+  // const auto& private_link_cfg   = node_cfg["private_link"];
+  // const std::string link_bw      = private_link_cfg["bandwidth"];
+  // const std::string link_lat     = private_link_cfg.value("latency", "0s");
 
-  const auto& loopback_cfg       = node_cfg["loopback"];
-  const std::string loopback_bw  = loopback_cfg["bandwidth"];
-  const std::string loopback_lat = loopback_cfg.value("latency", "0s");
+  bool has_private_link = node_cfg.contains("private_link");
+
+  std::string link_bw;
+  std::string link_lat;
+  if (has_private_link) {
+    const auto& private_link_cfg = node_cfg["private_link"];
+    link_bw = private_link_cfg["bandwidth"].get<std::string>();
+    link_lat = private_link_cfg.value("latency", "0s");
+  }
+
+  bool has_loopback = node_cfg.contains("loopback");
+
+  std::string loopback_bw;
+  std::string loopback_lat;
+  if (has_loopback) {
+    const auto& loopback_cfg       = node_cfg["loopback"];
+    loopback_bw  = loopback_cfg["bandwidth"];
+    loopback_lat = loopback_cfg.value("latency", "0s");
+  }
 
   // Check for node storage (always OneDisk for node-local storage)
   bool has_storage = node_cfg.contains("storage");
@@ -146,16 +341,35 @@ void create_cluster_zone(sg4::NetZone* parent, const json& cluster_config)
     }
 
     // Create links (up/down as separate links for compatibility)
-    auto* link_up   = cluster->add_link(hostname + "_LinkUP", link_bw)->set_latency(link_lat);
-    auto* link_down = cluster->add_link(hostname + "_LinkDOWN", link_bw)->set_latency(link_lat);
-    auto* loopback  = cluster->add_link(hostname + "_loopback", loopback_bw)
+    // Routing – only meaningful for star topology; structured topologies
+    // handle their own internal routing automatically.
+    if (topo_type == "star") {
+      if (has_private_link) {
+        auto* link_up   = cluster->add_link(hostname + "_LinkUP",   link_bw)->set_latency(link_lat);
+        auto* link_down = cluster->add_link(hostname + "_LinkDOWN", link_bw)->set_latency(link_lat);
+        cluster->add_route(host, nullptr, {sg4::LinkInRoute(link_up),   sg4::LinkInRoute(backbone)}, false);
+        cluster->add_route(nullptr, host, {sg4::LinkInRoute(backbone), sg4::LinkInRoute(link_down)}, false);
+      } else {
+        cluster->add_route(host, nullptr, {sg4::LinkInRoute(backbone)}, false);
+        cluster->add_route(nullptr, host, {sg4::LinkInRoute(backbone)}, false);
+      }
+    }
+
+    if (has_loopback) {
+      auto* loopback  = cluster->add_link(hostname + "_loopback", loopback_bw)
                           ->set_latency(loopback_lat)
                           ->set_sharing_policy(sg4::Link::SharingPolicy::FATPIPE);
+      cluster->add_route(host, host, {sg4::LinkInRoute(loopback)}, false);
+    }
+    else {
+      // If no loopback, add a direct route from host to itself with zero-cost (for simplicity)
+      cluster->add_route(host, host, {}, false);
+    }
 
     // Add routes
-    cluster->add_route(host, nullptr, {sg4::LinkInRoute(link_up), sg4::LinkInRoute(backbone)}, false);
-    cluster->add_route(nullptr, host, {sg4::LinkInRoute(backbone), sg4::LinkInRoute(link_down)}, false);
-    cluster->add_route(host, host, {loopback});
+    // cluster->add_route(host, nullptr, {sg4::LinkInRoute(link_up), sg4::LinkInRoute(backbone)}, false);
+    // cluster->add_route(nullptr, host, {sg4::LinkInRoute(backbone), sg4::LinkInRoute(link_down)}, false);
+    // cluster->add_route(host, host, {loopback});
   }
 
   // Set gateway

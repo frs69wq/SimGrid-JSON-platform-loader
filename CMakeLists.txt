@@ -40,6 +40,22 @@ target_include_directories(platform_summary PRIVATE
     ${FSMOD_INCLUDE_DIR}
 )
 
+# Platform test: loads the platform .so at runtime via e.load_platform()
+add_executable(test_platform test_platform.cpp)
+
+target_include_directories(test_platform PRIVATE
+    ${SimGrid_INCLUDE_DIR}
+    ${FSMOD_INCLUDE_DIR}
+)
+
+target_link_libraries(test_platform PRIVATE
+  SimGrid::SimGrid
+  FSMOD::FSMOD
+  nlohmann_json::nlohmann_json
+)
+
+
+
 # Tests
 enable_testing()
 
