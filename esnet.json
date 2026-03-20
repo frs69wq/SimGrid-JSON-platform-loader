@@ -1,10 +1,18 @@
 {
   "facilities": [
     {
-      "name": "SLAC",
+      "name": "slac",
       "storage_systems": [
         {
           "name": "ffb",
+          "server_speed": "1Gf",
+          "type": "JBOD",
+          "disk_count": 1,
+          "read_bandwidth": "180MBps",
+          "write_bandwidth": "160MBps"
+        },
+        {
+          "name": "slac-sratch",
           "server_speed": "1Gf",
           "type": "JBOD",
           "disk_count": 1,
@@ -17,12 +25,12 @@
           "name": "instrument",
           "prefix": "node-",
           "suffix": ".inst",
-          "count": 120,
+          "count": 5,
           "node": {
             "speed": "11Gf",
             "cores": 1,
             "storage": {
-              "name": "local_nvme",
+              "name": "ssd",
               "read_bandwidth": "560MBps",
               "write_bandwidth": "510MBps"
             }
@@ -36,7 +44,7 @@
           "name": "reduction",
           "prefix": "node-",
           "suffix": ".reduce",
-          "count": 120,
+          "count": 5,
           "node": {
             "speed": "6Gf",
             "cores": 1
@@ -44,20 +52,6 @@
           "backbone": {
             "bandwidth": "100Gbps",
             "latency": "1ms"
-          }
-        },
-        {
-          "name": "slac_dtn",
-          "prefix": "node-",
-          "suffix": ".slack-dtn",
-          "count": 10,
-          "node": {
-            "speed": "6Gf",
-            "cores": 1
-          },
-          "backbone": {
-            "bandwidth": "100Gbps",
-            "latency": "1us"
           }
         }
       ],
@@ -71,11 +65,6 @@
           "name": "reduction-to-ffb",
           "bandwidth": "20Gbps",
           "latency": "1ms"
-        },
-        {
-          "name": "ffb-to-slac-dtn",
-          "bandwidth": "20Gbps",
-          "latency": "1us"
         }
       ],
       "routes": [
@@ -88,11 +77,6 @@
           "src": "reduction",
           "dst": "ffb",
           "links": ["reduction-to-ffb"]
-        },
-        {
-          "src": "ffb",
-          "dst": "slac_dtn",
-          "links": ["ffb-to-slac-dtn"]
         }
       ]
     },
@@ -100,7 +84,7 @@
       "name": "nersc",
       "storage_systems": [
         {
-          "name": "scratch",
+          "name": "nersc-scratch",
           "server_speed": "1Gf",
           "type": "JBOD",
           "disk_count": 10000,
@@ -113,7 +97,7 @@
           "name": "cori",
           "prefix": "node-",
           "suffix": ".cori",
-          "count": 64,
+          "count": 5,
           "node": {
             "speed": "1177Gf",
             "cores": 32,
@@ -141,7 +125,7 @@
           "name": "cori-dtn",
           "prefix": "node-",
           "suffix": ".cori-dtn",
-          "count": 8,
+          "count": 5,
           "node": {
             "speed": "10Gf",
             "cores": 1
@@ -187,7 +171,7 @@
   ],
   "routes": [
     {
-      "src": "SLAC",
+      "src": "slac",
       "dst": "nersc",
       "links": ["slac-to-nersc"]
     }

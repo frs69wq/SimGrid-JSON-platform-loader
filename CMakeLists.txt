@@ -12,6 +12,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 find_package(SimGrid REQUIRED)
 find_package(FSMod REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(DTLMod REQUIRED)
+
 
 # Main shared library: JSON-based platform loader
 add_library(platform SHARED json_platform_loader.cpp)
@@ -54,6 +56,35 @@ target_link_libraries(test_platform PRIVATE
   nlohmann_json::nlohmann_json
 )
 
+add_executable(test_platform_2 test_platform_2.cpp)
+
+target_include_directories(test_platform_2 PRIVATE
+    ${SimGrid_INCLUDE_DIR}
+    ${FSMOD_INCLUDE_DIR}
+    ${DTLMOD_INCLUDE_DIR}
+)
+
+target_link_libraries(test_platform_2 PRIVATE
+  SimGrid::SimGrid
+  FSMOD::FSMOD
+  ${DTLMOD_LIBRARY}
+  nlohmann_json::nlohmann_json
+)
+
+add_executable(test_platform_3 test_platform_3.cpp)
+
+target_include_directories(test_platform_3 PRIVATE
+    ${SimGrid_INCLUDE_DIR}
+    ${FSMOD_INCLUDE_DIR}
+    ${DTLMOD_INCLUDE_DIR}
+)
+
+target_link_libraries(test_platform_3 PRIVATE
+  SimGrid::SimGrid
+  FSMOD::FSMOD
+  ${DTLMOD_LIBRARY}
+  nlohmann_json::nlohmann_json
+)
 
 
 # Tests

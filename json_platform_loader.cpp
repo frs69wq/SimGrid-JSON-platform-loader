@@ -17,6 +17,7 @@
 #include <fsmod/JBODStorage.hpp>
 #include <fsmod/OneDiskStorage.hpp>
 #include <simgrid/s4u.hpp>
+#include "simgrid/instr.h"
 
 namespace sg4  = simgrid::s4u;
 namespace sgfs = simgrid::fsmod;
@@ -558,4 +559,8 @@ void load_platform(const sg4::Engine& e)
   if (config.contains("filesystems")) {
     create_filesystems(config["filesystems"], config);
   }
+
+  const std::string outputfile("./network_topology.dot");
+
+  simgrid::instr::platform_graph_export_graphviz(outputfile);
 }
