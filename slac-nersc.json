@@ -1,0 +1,196 @@
+{
+  "facilities": [
+    {
+      "name": "slac",
+      "storage_systems": [
+        {
+          "name": "slac-scratch",
+          "server_speed": "1Gf",
+          "type": "JBOD",
+          "disk_count": 1,
+          "read_bandwidth": "180MBps",
+          "write_bandwidth": "160MBps"
+        }
+      ],
+      "clusters": [
+        {
+          "name": "instrument",
+          "prefix": "node-",
+          "suffix": ".inst",
+          "count": 5,
+          "node": {
+            "speed": "11Gf",
+            "cores": 1
+          },
+          "backbone": {
+            "bandwidth": "1Tbps",
+            "latency": "1ms"
+          }
+        },
+        {
+          "name": "slac-dtn",
+          "prefix": "node-",
+          "suffix": ".slac-dtn",
+          "count": 5,
+          "node": {
+            "speed": "6Gf",
+            "cores": 1
+          },
+          "backbone": {
+            "bandwidth": "100Gbps",
+            "latency": "1ms"
+          }
+        }
+      ],
+      "links": [
+        {
+          "name": "instrument-to-scratch",
+          "bandwidth": "1Tbps",
+          "latency": "1ms"
+        },
+        {
+          "name": "slac-dtn-to-scratch",
+          "bandwidth": "20Gbps",
+          "latency": "1ms"
+        }
+      ],
+      "routes": [
+        {
+          "src": "instrument",
+          "dst": "slac-scratch",
+          "links": ["instrument-to-scratch"]
+        },
+        {
+          "src": "slac-dtn",
+          "dst": "slac-scratch",
+          "links": ["slac-dtn-to-scratch"]
+        }
+      ]
+    },
+    {
+      "name": "nersc",
+      "storage_systems": [
+        {
+          "name": "nersc-scratch",
+          "server_speed": "1Gf",
+          "type": "JBOD",
+          "disk_count": 10000,
+          "read_bandwidth": "3GBps",
+          "write_bandwidth": "3GBps"
+        }
+      ],
+      "clusters": [
+        {
+          "name": "cori",
+          "prefix": "node-",
+          "suffix": ".cori",
+          "count": 5,
+          "node": {
+            "speed": "1177Gf",
+            "cores": 32,
+            "topology": {
+              "type": "dragonfly",
+              "groups": [6, 2],
+              "chassis": [3, 1],
+              "routers": [4, 1],
+              "nodes": 2,
+              "bandwidth": "10Gbps",
+              "latency": "1ms",
+              "sharing_policy": "SPLITDUPLEX"
+            },
+            "loopback": {
+              "bandwidth": "136Gbps",
+              "latency": "100ns"
+            }
+          },
+          "backbone": {
+            "bandwidth": "10Gbps",
+            "latency": "1ms"
+          }
+        },
+        {
+          "name": "nersc-dtn",
+          "prefix": "node-",
+          "suffix": ".nersc-dtn",
+          "count": 5,
+          "node": {
+            "speed": "10Gf",
+            "cores": 1
+          },
+          "backbone": {
+            "bandwidth": "200Gbps",
+            "latency": "1us"
+          }
+        }
+      ],
+      "links": [
+        {
+          "name": "cori-to-scratch",
+          "bandwidth": "700Gbps",
+          "latency": "1ms"
+        },
+        {
+          "name": "nersc-dtn-to-scratch",
+          "bandwidth": "20Gbps",
+          "latency": "1us"
+        }
+      ],
+      "routes": [
+        {
+          "src": "nersc-dtn",
+          "dst": "nersc-scratch",
+          "links": ["nersc-dtn-to-scratch"]
+        },
+        {
+          "src": "cori",
+          "dst": "nersc-scratch",
+          "links": ["cori-to-scratch"]
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "name": "slac-to-nersc",
+      "bandwidth": "1Gbps",
+      "latency": "10ms"
+    }
+  ],
+  "routes": [
+    {
+      "src": "slac",
+      "dst": "nersc",
+      "links": ["slac-to-nersc"]
+    }
+  ],
+  "storage_systems": [
+    {
+      "name": "pfs",
+      "server_speed": "1Gf",
+      "type": "JBOD",
+      "disk_count": 1,
+      "read_bandwidth": "180MBps",
+      "write_bandwidth": "160MBps"
+    }
+  ],
+  "filesystems": [
+    {
+      "name": "nersc-scratch-fs",
+      "storage_system": "nersc-scratch",
+      "mount_point": "/nersc-scratch/",
+      "size": "560TB"
+    },
+    {
+      "name": "slac-scratch-fs",
+      "storage_system": "slac-scratch",
+      "mount_point": "/slac-scratch/",
+      "size": "30PB"
+    },
+    {
+      "name": "remote_fs",
+      "storage_system": "pfs",
+      "mount_point": "/pfs/",
+      "size": "100TB"
+    }
+  ]
+}
