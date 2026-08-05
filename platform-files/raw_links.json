@@ -1,0 +1,1009 @@
+[
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+kans-data-sw:ip+192.168.32.3",
+        "port": "HundredGigE0/0/0/21.3000",
+        "site": "KANS"
+      },
+      {
+        "node": "node+dall-data-sw:ip+192.168.22.3",
+        "port": "HundredGigE0/0/0/21.3000",
+        "site": "DALL"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+dall-data-sw:HundredGigE0/0/0/21.3000 to port+kans-data-sw:HundredGigE0/0/0/21.3000",
+    "sites": [
+      "KANS",
+      "DALL"
+    ]
+  },
+  {
+    "available_bandwidth": 960,
+    "bandwidth": 1200,
+    "endpoints": [
+      {
+        "node": "node+losa-data-sw:ip+192.168.30.3",
+        "port": "Bundle-Ether101.3000",
+        "site": "LOSA"
+      },
+      {
+        "node": "node+dall-data-sw:ip+192.168.22.3",
+        "port": "Bundle-Ether101.3000",
+        "site": "DALL"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+dall-data-sw:Bundle-Ether101.3000 to port+losa-data-sw:Bundle-Ether101.3000",
+    "sites": [
+      "LOSA",
+      "DALL"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+kans-data-sw:ip+192.168.32.3",
+        "port": "HundredGigE0/0/0/19.1000",
+        "site": "KANS"
+      },
+      {
+        "node": "node+gpn-data-sw:ip+192.168.25.3",
+        "port": "HundredGigE0/0/0/23.1000",
+        "site": "GPN"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+gpn-data-sw:HundredGigE0/0/0/23.1000 to port+kans-data-sw:HundredGigE0/0/0/19.1000",
+    "sites": [
+      "KANS",
+      "GPN"
+    ]
+  },
+  {
+    "available_bandwidth": 32,
+    "bandwidth": 40,
+    "endpoints": [
+      {
+        "node": "node+seat-data-sw:ip+192.168.34.3",
+        "port": "HundredGigE0/0/0/19.3380",
+        "site": "SEAT"
+      },
+      {
+        "node": "node+hawi-data-sw:ip+192.168.44.3",
+        "port": "HundredGigE0/0/0/23.3380",
+        "site": "HAWI"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+hawi-data-sw:HundredGigE0/0/0/23.3380 to port+seat-data-sw:HundredGigE0/0/0/19.3380",
+    "sites": [
+      "SEAT",
+      "HAWI"
+    ]
+  },
+  {
+    "available_bandwidth": 32,
+    "bandwidth": 40,
+    "endpoints": [
+      {
+        "node": "node+losa-data-sw:ip+192.168.30.3",
+        "port": "HundredGigE0/0/0/15.3390",
+        "site": "LOSA"
+      },
+      {
+        "node": "node+hawi-data-sw:ip+192.168.44.3",
+        "port": "HundredGigE0/0/0/23.3390",
+        "site": "HAWI"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+hawi-data-sw:HundredGigE0/0/0/23.3390 to port+losa-data-sw:HundredGigE0/0/0/15.3390",
+    "sites": [
+      "LOSA",
+      "HAWI"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "STAR"
+      },
+      {
+        "node": "node+indi-data-sw:ip+192.168.36.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "INDI"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+indi-data-sw:HundredGigE0/0/0/23.3000 to port+star-data-sw:HundredGigE0/0/0/23.3000",
+    "sites": [
+      "STAR",
+      "INDI"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "HundredGigE0/0/0/31.3000",
+        "site": "STAR"
+      },
+      {
+        "node": "node+mich-data-sw:ip+192.168.17.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "MICH"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+mich-data-sw:HundredGigE0/0/0/23.3000 to port+star-data-sw:HundredGigE0/0/0/31.3000",
+    "sites": [
+      "STAR",
+      "MICH"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 40,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/15.3020",
+        "site": "WASH"
+      },
+      {
+        "node": "node+clem-data-sw:ip+192.168.27.3",
+        "port": "HundredGigE0/0/0/22.3020",
+        "site": "CLEM"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+clem-data-sw:HundredGigE0/0/0/22.3020 to port+wash-data-sw:HundredGigE0/0/0/15.3020",
+    "sites": [
+      "WASH",
+      "CLEM"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "FourHundredGigE0/0/0/60.4030",
+        "site": "NEWY"
+      },
+      {
+        "node": "node+amst-data-sw:ip+192.168.42.3",
+        "port": "HundredGigE0/0/0/23.2030",
+        "site": "AMST"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+amst-data-sw:HundredGigE0/0/0/23.2030 to port+newy-data-sw:FourHundredGigE0/0/0/60.4030",
+    "sites": [
+      "NEWY",
+      "AMST"
+    ]
+  },
+  {
+    "available_bandwidth": 8,
+    "bandwidth": 10,
+    "endpoints": [
+      {
+        "node": "node+brist-data-sw:ip+192.168.41.3",
+        "port": "TenGigE0/0/0/22/0.3250",
+        "site": "BRIST"
+      },
+      {
+        "node": "node+amst-data-sw:ip+192.168.42.3",
+        "port": "HundredGigE0/0/0/23.3250",
+        "site": "AMST"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+amst-data-sw:HundredGigE0/0/0/23.3250 to port+brist-data-sw:TenGigE0/0/0/22/0.3250",
+    "sites": [
+      "BRIST",
+      "AMST"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+cern-data-sw:ip+192.168.40.3",
+        "port": "Bundle-Ether100.2060",
+        "site": "CERN"
+      },
+      {
+        "node": "node+amst-data-sw:ip+192.168.42.3",
+        "port": "HundredGigE0/0/0/23.2060",
+        "site": "AMST"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+amst-data-sw:HundredGigE0/0/0/23.2060 to port+cern-data-sw:Bundle-Ether100.2060",
+    "sites": [
+      "CERN",
+      "AMST"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+salt-data-sw:ip+192.168.23.3",
+        "port": "HundredGigE0/0/0/17.3000",
+        "site": "SALT"
+      },
+      {
+        "node": "node+kans-data-sw:ip+192.168.32.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "KANS"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+kans-data-sw:HundredGigE0/0/0/23.3000 to port+salt-data-sw:HundredGigE0/0/0/17.3000",
+    "sites": [
+      "SALT",
+      "KANS"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "HundredGigE0/0/0/24.3000",
+        "site": "STAR"
+      },
+      {
+        "node": "node+kans-data-sw:ip+192.168.32.3",
+        "port": "HundredGigE0/0/0/22.3000",
+        "site": "KANS"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+kans-data-sw:HundredGigE0/0/0/22.3000 to port+star-data-sw:HundredGigE0/0/0/24.3000",
+    "sites": [
+      "STAR",
+      "KANS"
+    ]
+  },
+  {
+    "available_bandwidth": 8,
+    "bandwidth": 10,
+    "endpoints": [
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "FourHundredGigE0/0/0/60.3260",
+        "site": "NEWY"
+      },
+      {
+        "node": "node+brist-data-sw:ip+192.168.41.3",
+        "port": "TenGigE0/0/0/22/0.3260",
+        "site": "BRIST"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+brist-data-sw:TenGigE0/0/0/22/0.3260 to port+newy-data-sw:FourHundredGigE0/0/0/60.3260",
+    "sites": [
+      "NEWY",
+      "BRIST"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "FourHundredGigE0/0/0/60.3913",
+        "site": "NEWY"
+      },
+      {
+        "node": "node+mass-data-sw:ip+192.168.18.3",
+        "port": "Bundle-Ether100.3913",
+        "site": "MASS"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+mass-data-sw:Bundle-Ether100.3913 to port+newy-data-sw:FourHundredGigE0/0/0/60.3913",
+    "sites": [
+      "NEWY",
+      "MASS"
+    ]
+  },
+  {
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "FourHundredGigE0/0/0/60.300",
+        "site": "STAR"
+      },
+      {
+        "node": "node+cien-data-sw:ip+192.168.46.5",
+        "port": "Genericintf3",
+        "site": "CIEN"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+cien-data-sw:Genericintf3 to port+star-data-sw:FourHundredGigE0/0/0/60.300",
+    "sites": [
+      "STAR",
+      "CIEN"
+    ]
+  },
+  {
+    "available_bandwidth": 8,
+    "bandwidth": 10,
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "HundredGigE0/0/0/21.1857",
+        "site": "STAR"
+      },
+      {
+        "node": "node+eduky-data-sw:ip+192.168.45.3",
+        "port": "HundredGigE0/0/0/0.857",
+        "site": "EDUKY"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+eduky-data-sw:HundredGigE0/0/0/0.857 to port+star-data-sw:HundredGigE0/0/0/21.1857",
+    "sites": [
+      "STAR",
+      "EDUKY"
+    ]
+  },
+  {
+    "available_bandwidth": 8,
+    "bandwidth": 10,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/15.3401",
+        "site": "WASH"
+      },
+      {
+        "node": "node+gatech-data-sw:ip+192.168.28.3",
+        "port": "TenGigE0/0/0/20/0.3401",
+        "site": "GATECH"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+gatech-data-sw:TenGigE0/0/0/20/0.3401 to port+wash-data-sw:HundredGigE0/0/0/15.3401",
+    "sites": [
+      "WASH",
+      "GATECH"
+    ]
+  },
+  {
+    "available_bandwidth": 32,
+    "bandwidth": 40,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/15.4061",
+        "site": "WASH"
+      },
+      {
+        "node": "node+psc-data-sw:ip+192.168.37.3",
+        "port": "HundredGigE0/0/0/22.4061",
+        "site": "PSC"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+psc-data-sw:HundredGigE0/0/0/22.4061 to port+wash-data-sw:HundredGigE0/0/0/15.4061",
+    "sites": [
+      "WASH",
+      "PSC"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+prin-data-sw:ip+192.168.35.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "PRIN"
+      },
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "HundredGigE0/0/0/20.3000",
+        "site": "NEWY"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+newy-data-sw:HundredGigE0/0/0/20.3000 to port+prin-data-sw:HundredGigE0/0/0/23.3000",
+    "sites": [
+      "PRIN",
+      "NEWY"
+    ]
+  },
+  {
+    "available_bandwidth": 960,
+    "bandwidth": 1200,
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "Bundle-Ether101.3001",
+        "site": "STAR"
+      },
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "Bundle-Ether101.3001",
+        "site": "NEWY"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+newy-data-sw:Bundle-Ether101.3001 to port+star-data-sw:Bundle-Ether101.3001",
+    "sites": [
+      "STAR",
+      "NEWY"
+    ]
+  },
+  {
+    "available_bandwidth": 960,
+    "bandwidth": 1200,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "Bundle-Ether100.3000",
+        "site": "WASH"
+      },
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "Bundle-Ether100.3000",
+        "site": "NEWY"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+newy-data-sw:Bundle-Ether100.3000 to port+wash-data-sw:Bundle-Ether100.3000",
+    "sites": [
+      "WASH",
+      "NEWY"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+rutg-data-sw:ip+192.168.38.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "RUTG"
+      },
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "HundredGigE0/0/0/19.3000",
+        "site": "NEWY"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+newy-data-sw:HundredGigE0/0/0/19.3000 to port+rutg-data-sw:HundredGigE0/0/0/23.3000",
+    "sites": [
+      "RUTG",
+      "NEWY"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "HundredGigE0/0/0/29.3000",
+        "site": "STAR"
+      },
+      {
+        "node": "node+ncsa-data-sw:ip+192.168.20.3",
+        "port": "HundredGigE0/0/0/22.3000",
+        "site": "NCSA"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+ncsa-data-sw:HundredGigE0/0/0/22.3000 to port+star-data-sw:HundredGigE0/0/0/29.3000",
+    "sites": [
+      "STAR",
+      "NCSA"
+    ]
+  },
+  {
+    "available_bandwidth": 10,
+    "bandwidth": 400,
+    "endpoints": [
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "FourHundredGigE0/0/0/60.3732",
+        "site": "NEWY"
+      },
+      {
+        "node": "node+cern-data-sw:ip+192.168.40.3",
+        "port": "FourHundredGigE0/0/0/26.3732",
+        "site": "CERN"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+cern-data-sw:FourHundredGigE0/0/0/26.3732 to port+newy-data-sw:FourHundredGigE0/0/0/60.3732",
+    "sites": [
+      "NEWY",
+      "CERN"
+    ]
+  },
+  {
+    "available_bandwidth": 320,
+    "bandwidth": 400,
+    "endpoints": [
+      {
+        "node": "node+newy-data-sw:ip+192.168.31.3",
+        "port": "FourHundredGigE0/0/0/60.3733",
+        "site": "NEWY"
+      },
+      {
+        "node": "node+cern-data-sw:ip+192.168.40.3",
+        "port": "FourHundredGigE0/0/0/26.3733",
+        "site": "CERN"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+cern-data-sw:FourHundredGigE0/0/0/26.3733 to port+newy-data-sw:FourHundredGigE0/0/0/60.3733",
+    "sites": [
+      "NEWY",
+      "CERN"
+    ]
+  },
+  {
+    "available_bandwidth": 10,
+    "bandwidth": 400,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/19.3731",
+        "site": "WASH"
+      },
+      {
+        "node": "node+cern-data-sw:ip+192.168.40.3",
+        "port": "FourHundredGigE0/0/0/26.3731",
+        "site": "CERN"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+cern-data-sw:FourHundredGigE0/0/0/26.3731 to port+wash-data-sw:HundredGigE0/0/0/19.3731",
+    "sites": [
+      "WASH",
+      "CERN"
+    ]
+  },
+  {
+    "available_bandwidth": 10,
+    "bandwidth": 400,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/19.2040",
+        "site": "WASH"
+      },
+      {
+        "node": "node+cern-data-sw:ip+192.168.40.3",
+        "port": "FourHundredGigE0/0/0/26.2040",
+        "site": "CERN"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+cern-data-sw:FourHundredGigE0/0/0/26.2040 to port+wash-data-sw:HundredGigE0/0/0/19.2040",
+    "sites": [
+      "WASH",
+      "CERN"
+    ]
+  },
+  {
+    "available_bandwidth": 100,
+    "bandwidth": 400,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/19.2050",
+        "site": "WASH"
+      },
+      {
+        "node": "node+cern-data-sw:ip+192.168.40.3",
+        "port": "FourHundredGigE0/0/0/26.2050",
+        "site": "CERN"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+cern-data-sw:FourHundredGigE0/0/0/26.2050 to port+wash-data-sw:HundredGigE0/0/0/19.2050",
+    "sites": [
+      "WASH",
+      "CERN"
+    ]
+  },
+  {
+    "available_bandwidth": 960,
+    "bandwidth": 1200,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "Bundle-Ether101.3000",
+        "site": "WASH"
+      },
+      {
+        "node": "node+atla-data-sw:ip+192.168.33.3",
+        "port": "Bundle-Ether100.3000",
+        "site": "ATLA"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+atla-data-sw:Bundle-Ether100.3000 to port+wash-data-sw:Bundle-Ether101.3000",
+    "sites": [
+      "WASH",
+      "ATLA"
+    ]
+  },
+  {
+    "available_bandwidth": 960,
+    "bandwidth": 1200,
+    "endpoints": [
+      {
+        "node": "node+dall-data-sw:ip+192.168.22.3",
+        "port": "Bundle-Ether100.3000",
+        "site": "DALL"
+      },
+      {
+        "node": "node+atla-data-sw:ip+192.168.33.3",
+        "port": "Bundle-Ether101.3000",
+        "site": "ATLA"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+atla-data-sw:Bundle-Ether101.3000 to port+dall-data-sw:Bundle-Ether100.3000",
+    "sites": [
+      "DALL",
+      "ATLA"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+fiu-data-sw:ip+192.168.26.3",
+        "port": "HundredGigE0/0/0/22.1000",
+        "site": "FIU"
+      },
+      {
+        "node": "node+atla-data-sw:ip+192.168.33.3",
+        "port": "HundredGigE0/0/0/20.1000",
+        "site": "ATLA"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+atla-data-sw:HundredGigE0/0/0/20.1000 to port+fiu-data-sw:HundredGigE0/0/0/22.1000",
+    "sites": [
+      "FIU",
+      "ATLA"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "HundredGigE0/0/0/25.3000",
+        "site": "STAR"
+      },
+      {
+        "node": "node+atla-data-sw:ip+192.168.33.3",
+        "port": "HundredGigE0/0/0/22.3000",
+        "site": "ATLA"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+atla-data-sw:HundredGigE0/0/0/22.3000 to port+star-data-sw:HundredGigE0/0/0/25.3000",
+    "sites": [
+      "STAR",
+      "ATLA"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+toky-data-sw:ip+192.168.43.3",
+        "port": "TenGigE0/0/0/18/0.2175",
+        "site": "TOKY"
+      },
+      {
+        "node": "node+seat-data-sw:ip+192.168.34.3",
+        "port": "HundredGigE0/0/0/19.1491",
+        "site": "SEAT"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+seat-data-sw:HundredGigE0/0/0/19.1491 to port+toky-data-sw:TenGigE0/0/0/18/0.2175",
+    "sites": [
+      "TOKY",
+      "SEAT"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+utah-data-sw:ip+192.168.19.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "UTAH"
+      },
+      {
+        "node": "node+salt-data-sw:ip+192.168.23.3",
+        "port": "HundredGigE0/0/0/19.3000",
+        "site": "SALT"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+salt-data-sw:HundredGigE0/0/0/19.3000 to port+utah-data-sw:HundredGigE0/0/0/23.3000",
+    "sites": [
+      "UTAH",
+      "SALT"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+seat-data-sw:ip+192.168.34.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "SEAT"
+      },
+      {
+        "node": "node+salt-data-sw:ip+192.168.23.3",
+        "port": "HundredGigE0/0/0/21.3000",
+        "site": "SALT"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+salt-data-sw:HundredGigE0/0/0/21.3000 to port+seat-data-sw:HundredGigE0/0/0/23.3000",
+    "sites": [
+      "SEAT",
+      "SALT"
+    ]
+  },
+  {
+    "available_bandwidth": 960,
+    "bandwidth": 1200,
+    "endpoints": [
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "Bundle-Ether100.3001",
+        "site": "STAR"
+      },
+      {
+        "node": "node+salt-data-sw:ip+192.168.23.3",
+        "port": "Bundle-Ether101.3001",
+        "site": "SALT"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+salt-data-sw:Bundle-Ether101.3001 to port+star-data-sw:Bundle-Ether100.3001",
+    "sites": [
+      "STAR",
+      "SALT"
+    ]
+  },
+  {
+    "available_bandwidth": 32,
+    "bandwidth": 40,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/15.2050",
+        "site": "WASH"
+      },
+      {
+        "node": "node+max-data-sw:ip+192.168.15.3",
+        "port": "HundredGigE0/0/0/22.2050",
+        "site": "MAX"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+max-data-sw:HundredGigE0/0/0/22.2050 to port+wash-data-sw:HundredGigE0/0/0/15.2050",
+    "sites": [
+      "WASH",
+      "MAX"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+ucsd-data-sw:ip+192.168.24.3",
+        "port": "HundredGigE0/0/0/21.3000",
+        "site": "UCSD"
+      },
+      {
+        "node": "node+losa-data-sw:ip+192.168.30.3",
+        "port": "HundredGigE0/0/0/17.3000",
+        "site": "LOSA"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+losa-data-sw:HundredGigE0/0/0/17.3000 to port+ucsd-data-sw:HundredGigE0/0/0/21.3000",
+    "sites": [
+      "UCSD",
+      "LOSA"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+toky-data-sw:ip+192.168.43.3",
+        "port": "TenGigE0/0/0/18/0.2185",
+        "site": "TOKY"
+      },
+      {
+        "node": "node+losa-data-sw:ip+192.168.30.3",
+        "port": "HundredGigE0/0/0/15.3360",
+        "site": "LOSA"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+losa-data-sw:HundredGigE0/0/0/15.3360 to port+toky-data-sw:TenGigE0/0/0/18/0.2185",
+    "sites": [
+      "TOKY",
+      "LOSA"
+    ]
+  },
+  {
+    "available_bandwidth": 8,
+    "bandwidth": 10,
+    "endpoints": [
+      {
+        "node": "node+sri-data-sw:ip+192.168.39.3",
+        "port": "TenGigE0/0/0/22/0.3370",
+        "site": "SRI"
+      },
+      {
+        "node": "node+losa-data-sw:ip+192.168.30.3",
+        "port": "HundredGigE0/0/0/15.3370",
+        "site": "LOSA"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+losa-data-sw:HundredGigE0/0/0/15.3370 to port+sri-data-sw:TenGigE0/0/0/22/0.3370",
+    "sites": [
+      "SRI",
+      "LOSA"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+seat-data-sw:ip+192.168.34.3",
+        "port": "HundredGigE0/0/0/22.3000",
+        "site": "SEAT"
+      },
+      {
+        "node": "node+losa-data-sw:ip+192.168.30.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "LOSA"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+losa-data-sw:HundredGigE0/0/0/23.3000 to port+seat-data-sw:HundredGigE0/0/0/22.3000",
+    "sites": [
+      "SEAT",
+      "LOSA"
+    ]
+  },
+  {
+    "available_bandwidth": 960,
+    "bandwidth": 1200,
+    "endpoints": [
+      {
+        "node": "node+salt-data-sw:ip+192.168.23.3",
+        "port": "Bundle-Ether100.3000",
+        "site": "SALT"
+      },
+      {
+        "node": "node+losa-data-sw:ip+192.168.30.3",
+        "port": "Bundle-Ether100.3000",
+        "site": "LOSA"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+losa-data-sw:Bundle-Ether100.3000 to port+salt-data-sw:Bundle-Ether100.3000",
+    "sites": [
+      "SALT",
+      "LOSA"
+    ]
+  },
+  {
+    "available_bandwidth": 80,
+    "bandwidth": 100,
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/23.3000",
+        "site": "WASH"
+      },
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "HundredGigE0/0/0/27.3000",
+        "site": "STAR"
+      }
+    ],
+    "layer": "L1",
+    "name": "port+star-data-sw:HundredGigE0/0/0/27.3000 to port+wash-data-sw:HundredGigE0/0/0/23.3000",
+    "sites": [
+      "WASH",
+      "STAR"
+    ]
+  },
+  {
+    "available_bandwidth": 8,
+    "bandwidth": 10,
+    "endpoints": [
+      {
+        "node": "node+tacc-data-sw:ip+192.168.16.3",
+        "port": "HundredGigE0/0/0/23.3160",
+        "site": "TACC"
+      },
+      {
+        "node": "node+star-data-sw:ip+192.168.14.3",
+        "port": "HundredGigE0/0/0/21.3160",
+        "site": "STAR"
+      }
+    ],
+    "layer": "L2",
+    "name": "port+star-data-sw:HundredGigE0/0/0/21.3160 to port+tacc-data-sw:HundredGigE0/0/0/23.3160",
+    "sites": [
+      "TACC",
+      "STAR"
+    ]
+  },
+  {
+    "endpoints": [
+      {
+        "node": "node+wash-data-sw:ip+192.168.21.3",
+        "port": "HundredGigE0/0/0/15",
+        "site": "WASH"
+      },
+      {
+        "node": "node+AL2S",
+        "site": "AL2S"
+      }
+    ],
+    "layer": "L2",
+    "name": "core1.wash:HundredGigE0/0/0/28-link",
+    "sites": [
+      "WASH",
+      "AL2S"
+    ]
+  }
+]
